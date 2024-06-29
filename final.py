@@ -1,3 +1,4 @@
+# Imports
 import streamlit as st
 import vertexai
 import streamlit as st
@@ -7,6 +8,7 @@ import os
 
 os.environ['GRPC_DNS_RESOLVER'] = 'native'
 
+# Model configuration
 project = "explorer-gemini"
 vertexai.init(project = project)
 
@@ -16,11 +18,14 @@ chat = model.start_chat()
 
 st.title("Gemini Chatbot")
 #clear_button = st.button('Clear Chat',type='primary')
+
+# Give model instruction on name greetings + personality
 if "messages" not in st.session_state:
     st.session_state.messages = [] # Create message history as empty list 
     st.session_state.messages.append({"role": "user", "content": '->Ask my name and refer to me with personalized greetings. You are a witty, funny chatbot that makes cringe jokes!'})
     st.session_state.messages.append({"role": "model","content": '->I have undertood the instructions.'})
 
+# Print all messages + add to gemini history
 for index, message in enumerate(st.session_state.messages):
     # Code for displaying and loading chat history
     content = Content(
@@ -33,6 +38,7 @@ for index, message in enumerate(st.session_state.messages):
     
     chat.history.append(content)
 
+# Q & A function
 def llm_function(chat: ChatSession, query):
     with st.chat_message("user"):
         st.markdown(query)
